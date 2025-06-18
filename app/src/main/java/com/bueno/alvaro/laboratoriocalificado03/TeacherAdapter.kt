@@ -21,16 +21,12 @@ class TeacherAdapter(
             Glide.with(itemView)
                 .load(teacher.imageUrl)
                 .into(binding.ivPhoto)
-
-            // Click simple: Llamar
             itemView.setOnClickListener {
                 val intent = Intent(Intent.ACTION_DIAL).apply {
                     data = Uri.parse("tel:${teacher.phone}")
                 }
                 it.context.startActivity(intent)
             }
-
-            // Click largo: Enviar correo
             itemView.setOnLongClickListener {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:${teacher.email}")
@@ -45,11 +41,9 @@ class TeacherAdapter(
         val view = ItemTeacherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view.root)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val teacher = list[position]
         holder.bind(teacher)
     }
-
     override fun getItemCount(): Int = list.size
 }
