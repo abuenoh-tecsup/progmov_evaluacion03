@@ -1,11 +1,12 @@
 package com.bueno.alvaro.laboratoriocalificado03
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bueno.alvaro.laboratoriocalificado03.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,8 +21,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvTeachers.layoutManager = LinearLayoutManager(this)
+        val spanCount = calculateSpanCount()
+        binding.rvTeachers.layoutManager = GridLayoutManager(this, spanCount)
         binding.rvTeachers.adapter = teacherAdapter
+
         observeViewModel()
     }
 
@@ -38,5 +41,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.errorApi.observe(this, Observer { error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    private fun calculateSpanCount(): Int {
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+
+        return when {
+            screenWidthDp >= 900 -> 3
+            screenWidthDp >= 600 -> 2
+            else -> 1
+        }
     }
 }
